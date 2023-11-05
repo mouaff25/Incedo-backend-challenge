@@ -18,13 +18,14 @@ router.get('/artists', (req, res) => {
         return res.status(500).send({ error: 'LASTFM_API_KEY not set' });
     }
     const name = req.query.name;
+    const host = 'ws.audioscrobbler.com';
     if (!name) {
         logger.error('Missing required query parameter: name');
         return res.status(400).send({ error: 'Missing required query parameter: name' });
     }
     const requestUrl = url.format({
         protocol: 'http',
-        host: 'ws.audioscrobbler.com/2.0/',
+        host: host,
         pathname: '',
         query: {
             method: 'artist.search',
@@ -33,7 +34,7 @@ router.get('/artists', (req, res) => {
             format: 'json'
         }
     });
-    logger.debug(`Requesting ${requestUrl}`)
+    logger.debug(`Sending GET request to ${host} for name ${name}`)
     http.get(requestUrl, (response) => {
         let data = '';
         response.on('data', (chunk) => {
@@ -43,7 +44,7 @@ router.get('/artists', (req, res) => {
             return res.status(200).send(JSON.parse(data));
         });
     }).on('error', (err) => {
-        logger.error(`Error requesting ${requestUrl}: ${err}`);
+        logger.error(`Error requesting ${host} GET request for name ${name}: ${err}`);
         return res.status(500).send({ error: err });
     });
 });
