@@ -18,7 +18,7 @@ router.get('/artists', (req, res) => {
         return res.status(500).send({ error: 'LASTFM_API_KEY not set' });
     }
     const name = req.query.name;
-    const host = 'ws.audioscrobbler.com';
+    const host = 'ws.audioscrobbler.com/2.0/';
     if (!name) {
         logger.error('Missing required query parameter: name');
         return res.status(400).send({ error: 'Missing required query parameter: name' });
