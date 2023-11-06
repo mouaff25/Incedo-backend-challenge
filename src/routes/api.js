@@ -17,7 +17,13 @@ router.get('/artists', (req, res) => {
         logger.error('Missing required query parameter: name');
         return res.status(400).send({ error: 'Missing required query parameter: name' });
     }
-    ({ host, requestUrl } = getUrl(name));
+    try {
+        ({ host, requestUrl } = getUrl(name));
+    } catch (error) {
+        logger.error(`Error getting URL for name ${name}: ${error.message}`);
+        return res.status(500).send({ error: error.message });
+    }
+    
     logger.debug(`Sending GET request to ${host} for name ${name}`)
     http.get(requestUrl, (response) => {
         let data = '';

@@ -1,4 +1,5 @@
 const url = require('url');
+const { logger } = require('../logger/logger');
 
 function getUrl(name) {
     /**
@@ -18,8 +19,7 @@ function getUrl(name) {
     */
     const lastFmAPIKey = process.env.LASTFM_API_KEY;
     if (!lastFmAPIKey) {
-        logger.error('LASTFM_API_KEY not set');
-        return res.status(500).send({ error: 'LASTFM_API_KEY not set' });
+        throw new Error('Missing required environment variable: LASTFM_API_KEY');
     }
 
     const host = 'ws.audioscrobbler.com/2.0/';
