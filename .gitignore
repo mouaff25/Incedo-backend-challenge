@@ -131,3 +131,6 @@ dist
 
 # csv files
 data/csv-files/
+
+# test artifacts
+data/create-directory-test/
