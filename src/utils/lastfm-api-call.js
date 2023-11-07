@@ -27,8 +27,8 @@ function getArtist(name) {
      */
     return new Promise((resolve, reject) => {
         if (!name) {
-            logger.info('Missing required query parameter: name');
-            return reject({ error: 'Missing required query parameter: name' });
+            logger.error('Missing required parameter: name');
+            return reject({ error: 'Missing required parameter: name' });
         }
         try {
             ({ host, requestUrl } = getUrl(name));
@@ -51,14 +51,11 @@ function getArtist(name) {
                 }
                 const apiResponse = JSON.parse(data);
                 if (!apiResponse.results.artistmatches.artist.length) {
-                    logger.info(`No artist found for name "${name}"`);
                     const artist = artistsFallback[0];
-                    logger.warn(`Using fallback artist data for name "${name}", ${JSON.stringify(artist["name"])}`);
+                    logger.warn(`No artist found for name "${name}", using fallback artist data: ${JSON.stringify(artist["name"])}`);
                     return resolve(artist);
                 }
-                logger.info(`Successfully retrieved artist for name "${name}"`);
                 const artist = apiResponse.results.artistmatches.artist[0];
-                logger.debug(`Artist data for name "${name}": ${JSON.stringify(artist)}`);
                 return resolve(artist);
             });
         }).on('error', (err) => {

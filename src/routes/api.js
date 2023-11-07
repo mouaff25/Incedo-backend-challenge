@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { logger } = require('../logger/logger');
 const getArtist = require('../utils/lastfm-api-call');
+const writeToCsv = require('../utils/write-csv');
 
 const router = Router();
 
@@ -8,8 +9,9 @@ router.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
-router.get('/artists', (req, res) => {
-    const name = req.query.name;
+router.post('/artists', (req, res) => {
+    const name = req.body.name;
+    const csvFilename = req.body.csvFilename;
     if (!name) {
         logger.info('Missing required query parameter: name');
         return res.status(400).send({ error: 'Missing required query parameter: name' });
@@ -18,6 +20,9 @@ router.get('/artists', (req, res) => {
     artist.then((data) => {
         logger.info(`Successfully retrieved artist for name ${name}`);
         logger.debug(`Artist data for name ${name}: ${JSON.stringify(data)}`);
+        if (csvFilename) {
+            writeToCsv(data, csvFilename);
+        }
         return res.status(200).send(data);
     }).catch((error) => {
         logger.error(`Error getting artist for name ${name}: ${error.message}`);
