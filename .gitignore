@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # csv files
-./data/csv-files
+data/csv-files/
