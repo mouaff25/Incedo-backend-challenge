@@ -7,12 +7,10 @@ const myFormat = printf(({ level, message, label, timestamp }) => {
 
 let logLevel = (process.env.LOG_LEVEL || 'info');
 
+let validLogLevel = true;
 if (!(logLevel in winston.config.npm.levels)) {
-    console.warn(`Valid log levels are: ${Object.keys(winston.config.npm.levels)}. Found '${logLevel}, setting log level to 'info'`);
     logLevel = 'info';
-}
-else {
-    console.log(`Log level set to ${logLevel}`);
+    validLogLevel = false;
 }
 
 const logger = winston.createLogger({
@@ -36,5 +34,12 @@ const loggerMiddleware = (req, res, next) => {
     logger.info(`${req.method} ${req.originalUrl}`);
     next();
 };
+
+if (validLogLevel) {
+    logger.info(`Log level set to ${logLevel}`);
+}
+else {
+    logger.warn("Invalid log level set. Defaulting to 'info'");
+}
 
 module.exports = { logger, loggerMiddleware };
