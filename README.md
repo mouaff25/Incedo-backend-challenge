@@ -63,6 +63,12 @@ To run the application, use the following command:
 npm start
 ```
 
+To run the application in development mode, use the following command:
+
+```bash
+npm run dev
+```
+
 The application will be available at `http://localhost:5000` by default. You can change the port number in the `.env` file or by setting the `PORT` environment variable.
 
 ### Searching for Artists
