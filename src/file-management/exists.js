@@ -8,6 +8,15 @@ function chechExists(path) {
      * @param {string} filePath - The path to the file to check
      * @returns {boolean} - True if the file exists, false otherwise
      * 
+     * @example
+     * 
+     * chechExists('./data/csv-files/artists.csv').then((exists) => {
+     *    if (exists) {
+     *       console.log('File exists');
+     *   } else {
+     *      console.log('File does not exist');
+     *  }
+     * });
      */
     return fs.promises.access(path, fs.constants.F_OK).then(() => {
         return true;
