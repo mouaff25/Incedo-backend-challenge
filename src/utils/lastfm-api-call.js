@@ -51,8 +51,10 @@ function getArtist(name) {
                 }
                 const apiResponse = JSON.parse(data);
                 if (!apiResponse.results.artistmatches.artist.length) {
-                    const artist = artistsFallback[Math.floor(Math.random()*artistsFallback.length)]; // get random artist from artistsFallback
-                    logger.warn(`No artist found for name "${name}", using fallback artist data: ${JSON.stringify(artist["name"])}`);
+                    const artistName = artistsFallback[Math.floor(Math.random()*artistsFallback.length)]; // get random artist from artistsFallback
+                    logger.warn(`No artist found for name "${name}", using fallback artist data: ${JSON.stringify(artistName)}`);
+                    const artist = getArtist(artistName);
+                    
                     return resolve(artist);
                 }
                 const artist = apiResponse.results.artistmatches.artist[0];

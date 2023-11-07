@@ -1,8 +1,8 @@
 const express = require('express');
 const { loggerMiddleware } = require('./src/logger/logger');
-const apiRouter = require('./src/routes/api');
-const downloadRouter = require('./src/routes/download');
-const healthRouter = require('./src/routes/health');
+const apiRouter = require('./src/routes/api.route');
+const downloadRouter = require('./src/routes/download.route');
+const healthRouter = require('./src/routes/health.route');
 
 const app = express();
 
