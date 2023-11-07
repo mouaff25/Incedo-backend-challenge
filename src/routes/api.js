@@ -1,12 +1,8 @@
 const { Router } = require('express');
-const http = require('http');
 const { logger } = require('../logger/logger');
 const getArtist = require('../utils/lastfm-api-call');
 
-
-
 const router = Router();
-
 
 router.get('/', (req, res) => {
     res.send('Hello World!');

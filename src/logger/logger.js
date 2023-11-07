@@ -7,7 +7,6 @@ const myFormat = printf(({ level, message, label, timestamp }) => {
 
 let logLevel = (process.env.LOG_LEVEL || 'info');
 
-
 if (!(logLevel in winston.config.npm.levels)) {
     console.warn(`Valid log levels are: ${Object.keys(winston.config.npm.levels)}. Found '${logLevel}, setting log level to 'info'`);
     logLevel = 'info';
