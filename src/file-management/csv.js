@@ -1,22 +1,8 @@
 const csv = require('csv');
 const fs = require('fs');
+const checkFileExists = require('./exists');
 const { logger } = require('../logger/logger');
 
-
-function checkFileExists(filePath) {
-    /**
-     * This function checks if a file exists.
-     * 
-     * @param {string} filePath - The path to the file to check
-     * @returns {boolean} - True if the file exists, false otherwise
-     * 
-     */
-    return fs.promises.access(filePath, fs.constants.F_OK).then(() => {
-        return true;
-    }).catch(() => {
-        return false;
-    });
-}
 
 function writeToCsv(artist, filename) {
     /**
@@ -25,6 +11,43 @@ function writeToCsv(artist, filename) {
      * @param {object} artist - The artist data to write to the csv file
      * @param {string} filename - The name of the csv file to write to
      * @returns {undefined}
+     * 
+     * @example
+     * 
+     * const artist = {
+     *    "name": "Michael Jackson",
+     *    "listeners": "5014923",
+     *    "mbid": "f27ec8db-af05-4f36-916e-3d57f91ecf5e",
+     *    "url": "https://www.last.fm/music/Michael+Jackson",
+     *    "streamable": "0",
+     *    "image": [
+     *        {
+     *            "#text": "https://lastfm.freetls.fastly.net/i/u/34s/2a96cbd8b46e442fc41c2b86b821562f.png",
+     *            "size": "small"
+     *        },
+     *        {
+     *            "#text": "https://lastfm.freetls.fastly.net/i/u/64s/2a96cbd8b46e442fc41c2b86b821562f.png",
+     *            "size": "medium"
+     *        },
+     *        {
+     *            "#text": "https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png",
+     *            "size": "large"
+     *        },
+     *        {
+     *            "#text": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png",
+     *            "size": "extralarge"
+     *        },
+     *        {
+     *            "#text": "https://lastfm.freetls.fastly.net/i/u/300x300/2a96cbd8b46e442fc41c2b86b821562f.png",
+     *            "size": "mega"
+     *        }
+     *    ]
+     * }
+     * 
+     * writeToCsv(artist, 'artists.csv');
+     * 
+     * // ./data/csv-files/artists.csv created with the following data:
+     * // name,mbid,url,image_small,image
      */
     const name = artist.name;
     const mbid = artist.mbid;

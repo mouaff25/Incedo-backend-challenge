@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const { logger } = require('../logger/logger');
 const getArtist = require('../utils/lastfm-api-call');
-const writeToCsv = require('../utils/write-csv');
+const writeToCsv = require('../file-management/csv');
 
 const router = Router();
 
