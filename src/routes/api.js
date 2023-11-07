@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const http = require('http');
 const { logger } = require('../logger/logger');
-const getUrl = require('../utils/artists');
+const getUrl = require('../utils/api-url');
 
 
 const router = Router();

@@ -32,6 +32,7 @@ function getUrl(name) {
             method: 'artist.search',
             artist: name,
             api_key: process.env.LASTFM_API_KEY,
+            limit: 1,
             format: 'json'
         }
     });
