@@ -21,7 +21,7 @@ router.get('/artists', (req, res) => {
         return res.status(200).send(data);
     }).catch((error) => {
         logger.error(`Error getting artist for name ${name}: ${error.message}`);
-        return res.status(500).send({ error: error.message });
+        return res.status(500).send({ error: "Internal Server Error" });
     });
 });
 
