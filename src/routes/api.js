@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 router.get('/artists', (req, res) => {
     const name = req.query.name;
     if (!name) {
-        logger.error('Missing required query parameter: name');
+        logger.info('Missing required query parameter: name');
         return res.status(400).send({ error: 'Missing required query parameter: name' });
     }
     try {
