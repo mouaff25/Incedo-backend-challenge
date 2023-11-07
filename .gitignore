@@ -134,3 +134,6 @@ data/csv-files/
 
 # test artifacts
 data/create-directory-test/
+
+# vscode artifacts
+.vscode/
