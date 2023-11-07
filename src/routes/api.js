@@ -21,9 +21,16 @@ router.post('/artists', (req, res) => {
         logger.info(`Successfully retrieved artist for name ${name}`);
         logger.debug(`Artist data for name ${name}: ${JSON.stringify(data)}`);
         if (csvFilename) {
-            writeToCsv(data, csvFilename);
+            writeToCsv(data, csvFilename).catch((error) => {
+                logger.error(`Error writing artist data to csv file ${csvFilename}: ${error.message}`);
+                return res.status(500).send({ error: "Internal Server Error" });
+            }).then((resourceCreated) => {
+                if (resourceCreated) {
+                    return res.status(201).send(data);
+                }
+                return res.status(200).send(data);
+            });
         }
-        return res.status(200).send(data);
     }).catch((error) => {
         logger.error(`Error getting artist for name ${name}: ${error.message}`);
         return res.status(500).send({ error: "Internal Server Error" });
