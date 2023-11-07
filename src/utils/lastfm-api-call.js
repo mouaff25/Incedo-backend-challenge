@@ -1,7 +1,15 @@
 const { logger } = require('../logger/logger');
 const getUrl = require('../utils/api-url');
 const http = require('http');
+const { readFile } = require('fs').promises;
 
+// load artists-fallback data
+let artistsFallback = [];
+readFile('./data/artists-fallback.json', 'utf8').then((data) => {
+    artistsFallback = JSON.parse(data);
+}).catch((error) => {
+    logger.error(`Error loading artists-fallback.json: ${error.message}`);
+});
 
 function getArtist(name) {
     /**
@@ -25,25 +33,36 @@ function getArtist(name) {
         try {
             ({ host, requestUrl } = getUrl(name));
         } catch (error) {
-            logger.error(`Error getting URL for name ${name}: ${error.message}`);
+            logger.error(`Error getting URL for name "${name}": ${error.message}`);
             return reject({ error: error.message });
         }
-        
-        logger.debug(`Sending GET request to ${host} for name ${name}`)
+
+        logger.debug(`Sending GET request to ${host} for name "${name}"`)
         http.get(requestUrl, (response) => {
             let data = '';
             response.on('data', (chunk) => {
+                logger.debug(`Received data from ${host} GET request for name "${name}": ${chunk}`);
                 data += chunk;
             });
             response.on('end', () => {
                 if (response.statusCode !== 200) {
-                    logger.error(`Error requesting ${host} GET request for name ${name}: ${data}`);
+                    logger.error(`Error requesting ${host} GET request for name "${name}": ${data}`);
                     return reject({ error: data });
                 }
-                return resolve(JSON.parse(data));
+                const apiResponse = JSON.parse(data);
+                if (!apiResponse.results.artistmatches.artist.length) {
+                    logger.info(`No artist found for name "${name}"`);
+                    const artist = artistsFallback[0];
+                    logger.warn(`Using fallback artist data for name "${name}", ${JSON.stringify(artist["name"])}`);
+                    return resolve(artist);
+                }
+                logger.info(`Successfully retrieved artist for name "${name}"`);
+                const artist = apiResponse.results.artistmatches.artist[0];
+                logger.debug(`Artist data for name "${name}": ${JSON.stringify(artist)}`);
+                return resolve(artist);
             });
         }).on('error', (err) => {
-            logger.error(`Error requesting ${host} GET request for name ${name}: ${err}`);
+            logger.error(`Error requesting ${host} GET request for name "${name}": ${err}`);
             return reject({ error: err });
         });
     });
